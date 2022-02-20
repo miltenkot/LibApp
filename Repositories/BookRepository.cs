@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using LibApp.Models;
 using LibApp.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace LibApp.Repositories
 {
@@ -18,7 +19,7 @@ namespace LibApp.Repositories
 
         IEnumerable<Book> IBookInterface.GetBooks()
         {
-            return _context.Books;
+            return _context.Books.Include(b => b.Genre);
         }
          
         Book IBookInterface.GetBookById(int bookId) => _context.Books.Find(bookId);

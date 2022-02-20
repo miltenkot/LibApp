@@ -23,7 +23,7 @@ namespace LibApp.Models
 
 		public DateTime DateAdded { get; set; }
 
-		[Required(ErrorMessage = "Date is required")]
+        [Required(ErrorMessage = "Date is required")]
 		public DateTime ReleaseDate { get; set; }
 
 		[Required(ErrorMessage = "stocks are required")]

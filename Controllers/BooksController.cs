@@ -7,22 +7,24 @@ using LibApp.Models;
 using LibApp.ViewModels;
 using LibApp.Data;
 using Microsoft.EntityFrameworkCore;
+using LibApp.Interfaces;
 
 namespace LibApp.Controllers
 {
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBookInterface _bookInterface;
 
-        public BooksController(ApplicationDbContext context)
+        public BooksController(ApplicationDbContext context, IBookInterface bookInterface)
         {
             _context = context;
+            _bookInterface = bookInterface;
         }
 
         public IActionResult Index()
         {
-            var books = _context.Books
-                .Include(b => b.Genre)
+            var books = _bookInterface.GetBooks()
                 .ToList();
 
             return View(books);
@@ -31,7 +33,7 @@ namespace LibApp.Controllers
         public IActionResult Details(int id)
         {
             var book = _context.Books
-                .Include(b => b.Genre)
+                .Include(b => b.GenreId)
                 .SingleOrDefault(b => b.Id == id);
 
             return View(book);
@@ -95,8 +97,12 @@ namespace LibApp.Controllers
             return RedirectToAction("Index", "Books");
         }
 
-
-
+        [HttpGet]
+        [Route("api/books")]
+        public IList<Book> GetBooks()
+        {
+            return _bookInterface.GetBooks().ToList();
+        }
 
     }
 }
